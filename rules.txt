@@ -1,0 +1,80 @@
+### PRODUCTION SYSTEM FOR BEHAVIORS ###
+
+## WALL AVOIDANCE
+variables: 8 wall distances, speed
+
+- wall left/right = near
+  tracking = near
+  speed = low
+=> thrust
+
+- wall left/right = near
+  tracking = medium/far
+  speed = low
+OR
+  wall left/right = medium/far
+  tracking = medium/far
+  speed = high
+=> turn right/left
+
+- wall front/back = near
+  tracking = near
+  speed = low
+=> thrust
+
+- wall front/back = near
+  wall left = near
+  speed = low
+OR
+  wall front/back = medium/far
+  wall left = medium/far
+  speed = high
+=> turn right
+
+- wall front/back = near
+  wall right = near
+  speed = low
+OR
+  wall front/back = medium/far
+  wall right = medium/far
+  speed = high
+=> turn left
+
+
+
+## BULLET DODGING
+variables: shot angle, tracking
+(shot distance, short alert, enemyHeading)
+
+( Calculate difference between shot angle and agent's tracking:
+  -angle difference < |shot angle - tracking| < angle difference
+  180 - angle difference < |shot angle - tracking| < 180 + angle difference)
+
+- shot angle = tracking
+=> turn and thrust
+
+- shot angle != tracking
+=> thrust
+
+- if none
+=> spin
+
+
+## SHOOTING
+variables: aimdir
+- aimdir < 180
+=> turn right
+
+- aimdir > 180
+=> turn left
+
+- if none
+=> shoot
+
+## Questions
++ Where to get idx?
++ aimdir returns what?
+
+## Task
+- [] Write fuzzy system for wall avoidance behavior
+- [] 

@@ -45,11 +45,13 @@ def AI_loop():
   
   
   ########PRODUCTION SYSTEMS
-  if ai.selfSpeed() <= 5 and (frontWall >= 200) and (left45Wall >= 200) and (right45Wall >= 200) and (right90Wall >= 200) and (left90Wall >= 200) and (left135Wall >= 50) and (right135Wall >= 50) and (backWall >= 50):
+  far = 100
+  near = 35
+  if ai.selfSpeed() <= 5 and (frontWall >= far) and (left45Wall >= far) and (right45Wall >= far) and (right90Wall >= far) and (left90Wall >= far) and (left135Wall >= near) and (right135Wall >= near) and (backWall >= near):
     ai.thrust(1)
-  elif trackWall < 100:
+  elif trackWall < far:
     ai.thrust(1)
-  elif backWall <= 50 or left135Wall <= 50 or right135Wall <= 50 or leftBackWall <= 50 or rightBackWall <= 50:
+  elif backWall <= near or left135Wall <= near or right135Wall <= near or leftBackWall <= near or rightBackWall <= near:
     ai.thrust(1)
     
   #turn
@@ -62,16 +64,37 @@ def AI_loop():
   elif right90Wall <= 200:
     ai.turnLeft(1)
     
-  #shot
-  ai.lockClose()
-  #find enemy stats
-  enemyDist = ai.selfLockDist()
-  enemyDir = ai.lockHeadingDeg()
-  print(enemyDist, enemyDir)
-  if enemyDist <= 500:
-  	ai.turnToDeg(int(enemyDir))
+  # dodge
+  bulletDist = ai.shotDist(0)
+  
+  if bulletDist < far and bulletDist > 0:
+    bulletAngle = ai.shotVelDir(0)
+    turn = (bulletAngle + 90) %360
+    ai.turnToDeg(turn)
+    ai.emergencyThrust()
+    print(turn)
+    
+  # aim
+  arr = []
+  val = 0
+  # distance between agent and closet enemy
+  closest = ai.enemyDistance(0)
+  if closest <= 1000:
+    ai.turnToDeg(ai.aimdir(0))
+  ai.fireShot()
+  #for i in range(4):
+  #  if ai.enemyDistance(i) > 9999:
+  #    ai.turnRight(1)
+  #  else:
+  #    arr.append(enemyDistance(i))
+  #    val += 1
+  #print(arr)
+  #print(val)
+  
+  #if enemyDist <= 500:
+  #	ai.turnToDeg(int(enemyDir))
   
   #even if no enemy present, still shot
-  ai.fireShot()
+  #ai.fireShot()
 
 ai.start(AI_loop,["-name","Two","-join","localhost"])

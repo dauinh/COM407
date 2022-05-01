@@ -1,102 +1,77 @@
-### Program 2 -- Mathieu Vigneault, ______ ###
-### Date: 02-14-2020 ###
-### This program uses fuzzy rules to determine the wall avoidance ###
-
+#Sylvia Le, Linh Nguyen, Uyen Tran
 import libpyAI as ai
-from Program2_Fuzzy import *
+from Program2_Fuzzy import * 
+
 def AI_loop():
   #Release keys
   ai.thrust(0)
   ai.turnLeft(0)
   ai.turnRight(0)
-  #Set variables
+  
+  #find walls
   heading = int(ai.selfHeadingDeg())
   tracking = int(ai.selfTrackingDeg())
   frontWall = ai.wallFeeler(500,heading)
+  
   left45Wall = ai.wallFeeler(500,heading+45)
   right45Wall = ai.wallFeeler(500,heading-45)
   left90Wall = ai.wallFeeler(500,heading+90)
   right90Wall = ai.wallFeeler(500,heading-90)
   left135Wall = ai.wallFeeler(500,heading+135)
+  leftBackWall = ai.wallFeeler(500, heading+210)  #add for faster turn at parallel angle
   right135Wall = ai.wallFeeler(500,heading-135)
+  rightBackWall = ai.wallFeeler(500, heading-210)
   backWall = ai.wallFeeler(500,heading-180) 
   trackWall = ai.wallFeeler(500,tracking)
   
-  result_list = []
+
   risk_list = []
   for i in range(8):
-    Degree = tracking+(45*i)
-    Speed = ai.selfSpeed()
-    Distance = ai.wallFeeler(10000,tracking+(45*i))
-    result = Closing_Rate(Degree, tracking, Speed, Distance)
-    result_list.append(result)
-  	
-    ### Fuzzy membership ###
-    closing_rate, distance = Closing_Rate(Degree, tracking, Speed, Distance)
-    low, medium, fast = Fuzzy_Speed(closing_rate)
-    close, far = Fuzzy_Distance(distance)
-    risk = Fuzzy_Risk(low, medium, fast, close, far)
+    degree = 45*i
+    distance = ai.wallFeeler(10000,tracking+(45*i))
+    result = dist_to_wall(degree, distance)
+    # print("From angle", degree, "at ", result)
+    close, med, far = fuzzy(result)
+    risk = defuzz(far, med, close)
     risk_list.append(risk)
   
-  ## Get the direction in deg that is most risky for the robot ##
+  # find most risky wall
   max_risk = max(risk_list)
   track_risk = (tracking + (risk_list.index(max_risk)*45) % 360)
   min_risk = min(risk_list)
   
-
-  #######   Shooting Ennemies  ########
+  # print("max risk", max_risk)
+  # print("track risk", track_risk)
   
-  ##Find the closest ennemy##
-  ClosestID = ai.closestShipId()
-  print(ClosestID)
-  ##Get the closest ennemy direction and speed##
-  ClosestSpeed = ai.enemySpeedId(ClosestID)
-  print(ClosestSpeed)
-  ClosestDir = ai.enemyTrackingDegId(ClosestID)
-  print(ClosestDir)
-  ## Get the lockheadingdeg ##
-  enemy = ai.lockClose()
-  #print(enemy)
-  head = ai.lockHeadingDeg()
-  #print(head)
+  
+  ########PRODUCTION SYSTEMS
+  if ai.selfSpeed() <= 5 and (frontWall >= 200) and (left45Wall >= 200) and (right45Wall >= 200) and (right90Wall >= 200) and (left90Wall >= 200) and (left135Wall >= 50) and (right135Wall >= 50) and (backWall >= 50):
+    ai.thrust(1)
+  elif trackWall < 100:
+    ai.thrust(1)
+  elif backWall <= 50 or left135Wall <= 50 or right135Wall <= 50 or leftBackWall <= 50 or rightBackWall <= 50:
+    ai.thrust(1)
+    
+  #turn
+  elif frontWall <= 300 and (left45Wall < right45Wall): 
+    ai.turnRight(1)
+  elif left90Wall <= 200:
+    ai.turnRight(1) 
+  elif frontWall <= 300 and (left45Wall > right45Wall):
+    ai.turnLeft(1)
+  elif right90Wall <= 200:
+    ai.turnLeft(1)
+    
+  #shot
+  ai.lockClose()
+  #find enemy stats
   enemyDist = ai.selfLockDist()
-  #print(enemyDist)
+  enemyDir = ai.lockHeadingDeg()
+  print(enemyDist, enemyDir)
+  if enemyDist <= 500:
+  	ai.turnToDeg(int(enemyDir))
   
-  print("max_risk: ", max_risk)
-  #print("track_risk: ", track_risk)
-  #print("heading: ", heading)
-  
-  ## Get the angles on both side between tracking and heading ##
-  dist = (heading - track_risk) % 360
-  dist2 = (360 - dist) % 360
-  #print("dist: ", dist)
-  #print("dist2: ", dist2)
-  
-  ## Production system rules based off fuzzy output ##
-  if(dist <= 130 and dist >= 0 and ai.selfSpeed() > 0 and max_risk >= 75):
-    ai.turnLeft(1)
-    #print("turning left")
-  elif(dist2 <= 130 and dist2 >= 0 and ai.selfSpeed() > 0 and max_risk >= 75):
-    ai.turnRight(1)
-    #print("turning right")
-  elif(ai.selfSpeed() <= 10):
-    ai.thrust(1)
-    #print("thrust")
-  elif(trackWall <= 150):
-    ai.thrust(1)
-    #print("thrust")
-  elif(enemyDist <= 3000 and heading > (head) and enemyDist != 0):
-    ai.turnRight(1)
-    ai.fireShot()
-  elif(enemyDist <= 3000 and heading < (head) and enemyDist != 0):
-    ai.turnLeft(1)
-    ai.fireShot()
-  else:
-    #print("chilling")
-    ai.thrust(0)
-    ai.fireShot()
-  
-  
+  #even if no enemy present, still shot
+  ai.fireShot()
 
-ai.start(AI_loop,["-name", "Two", "-join", "localhost"])
-
+ai.start(AI_loop,["-name","Two","-join","localhost"])

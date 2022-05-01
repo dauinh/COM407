@@ -1,5 +1,6 @@
 #Sylvia Le, Linh Nguyen, Uyen Tran
 import libpyAI as ai
+import math
 from Fuzzy import *
 
 def AI_loop():
@@ -91,11 +92,11 @@ def AI_loop():
     ai.turnLeft(1)
     
   # dodge
-  bulletDist = ai.shotDist(0)
+  bullet_dist = ai.shotDist(0)
   
-  if bulletDist < 100 and bulletDist > 0:
-    bulletAngle = ai.shotVelDir(0)
-    turn = (bulletAngle + 90) %360
+  if bullet_dist < 100 and bullet_dist > 0:
+    bullet_angle = ai.shotVelDir(0)
+    turn = (bullet_angle + 90) %360
     ai.turnToDeg(turn)
     if ai.selfSpeed() <= 20:
       ai.thrust(1)
@@ -105,11 +106,17 @@ def AI_loop():
   # aim
   arr = []
   val = 0
-  # distance between agent and closet enemy
-  closest = ai.enemyDistance(0)
-  if closest <= 1000:
-    ai.turnToDeg(ai.aimdir(0))
+  turn_speed = ai.getTurnSpeed()
+  enemy_dist = ai.enemyDistance(0)
+  enemy_vel = ai.enemySpeed(0)
+  alpha = ai.aimdir(0)
+  x = (enemy_dist*math.sin(alpha)+enemy_vel*(alpha/turn_speed)) / (enemy_dist*math.cos(alpha))
+  degrees = math.degrees(math.atan(x))
+  # beta = degrees - alpha
+  if enemy_dist <= 1000:
+    ai.turnToDeg(degrees)
   ai.fireShot()
+
   #for i in range(4):
   #  if ai.enemyDistance(i) > 9999:
   #    ai.turnRight(1)

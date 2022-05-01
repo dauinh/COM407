@@ -33,8 +33,8 @@ def AI_loop():
   speed = ai.selfSpeed()
 
   # create membership functions
-  near = Membership(0, 35, True)
-  far = Membership(20, 100)
+  near = Membership(0, 150, True)
+  far = Membership(100, 250)
 
   slow = Membership(0, 10, True)
   fast = Membership(5, 20)

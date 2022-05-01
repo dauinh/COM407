@@ -2,22 +2,22 @@
 
 class Membership():
   def __init__(self, xmin, xmax, isnegative=False):
+    self.xmin = xmin
+    self.xmax = xmax
     self.isnegative = isnegative
     if isnegative:
-      ymin = 1
-      ymax = 0
       self.b = 1
-      self.a = (ymax - ymin)/(xmax - xmin)
+      self.a = -self.b/xmax
     else:
-      ymin = 0
-      ymax = 1
-      self.a = (ymax - ymin)/(xmax - xmin)
-      self.b = ymin - self.a*xmin
+      self.a = 1/(xmax - xmin)
+      self.b = - self.a*xmin
 
   def calcY(self, x):
     res = round(self.a*x + self.b, 3)
-    if res <= 0:      # clipping values smaller than 0
-      res = 0
+    if x <= self.xmin and self.isnegative:
+      res = 1
+    elif x >= self.xmax and not self.isnegative:
+      res = 1
     return res
 
   def calcX(self, y):
@@ -47,8 +47,8 @@ def cog(ranges=[], weights=[]):
 
 def main():
   # create membership functions
-  near = Membership(0, 35, True)
-  far = Membership(20, 100)
+  near = Membership(0, 50, True)
+  far = Membership(35, 75)
 
   slow = Membership(0, 10, True)
   fast = Membership(5, 20)

@@ -74,4 +74,4 @@ def AI_loop():
   #even if no enemy present, still shot
   ai.fireShot()
 
-ai.start(AI_loop,["-name","Two","-join","localhost"])
+ai.start(AI_loop,["-name","Test","-join","localhost"])

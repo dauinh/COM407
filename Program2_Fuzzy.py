@@ -1,108 +1,64 @@
-## Mathieu Vigneault, _______ ## 
-## 02-14-2020 ##
-## Some functions that generates fuzzy inputs and outputs ##
-
+#Sylvia Le, Linh Nguyen, Uyen (Holly) Tran
+#2/13/2022
+#Supporting functions for the main program
 import math
 
-## The function finds the closing rate and the distance for wall in a specified direction ##
-def Closing_Rate(Degree, tracking, Speed, Distance):
+def dist_to_wall(angle, tracking_dist):
+
+	dist_to_wall = 0
 	
-	angle = Degree - tracking
-	
-	if(angle >= 0 and angle <= 90): 
-		#angle = Degree - tracking
-		angle_opposite = 180 - 90 - angle
-		radian = math.radians(angle_opposite)
-		closing_rate = round(Speed * math.sin(radian),4)
-		distance = Distance 
-	elif(angle >= 90 and angle <= 180):
-		angle_opposite = 180 - 90 - (180-angle)
-		radian = math.radians(angle_opposite)
-		closing_rate = round(Speed * math.sin(radian) * (-1),4)
-		distance = Distance
-	elif(angle >= 180 and angle <= 270):
-		angle_opposite = 180 - 90 - (angle-180)
-		radian = math.radians(angle_opposite)
-		closing_rate = round(Speed * math.sin(radian) * (-1),4)
-		distance = Distance
-	else:
-		angle_opposite = 180 - 90 - (90-(angle-270))
-		radian = math.radians(angle_opposite)
-		closing_rate = round(Speed * math.sin(radian),4)
-		distance = Distance
+	if(angle >= 0 and angle <= 90):
+		comp_angle = 90 - angle
+		dist_to_wall = round(tracking_dist * math.sin(comp_angle),4)
 		
-	return closing_rate, distance
+	elif(angle >= 90 and angle <= 180):
+		comp_angle = 180 - angle
+		dist_to_wall = round(tracking_dist * math.sin(comp_angle) * (-1),4)
+		
+	elif(angle >= 180 and angle <= 270):
+		dist_to_wall = round(tracking_dist * math.sin(-angle) * (-1),4)
 
-## Give a degree of membership for slow, medium, fast closing rate ##
-def Fuzzy_Speed(Closing_rate):
-	
-	## Step 1 -- Closing Rate; slow, medium or fast ##
-	Membership_Slow = 0 
-	Membership_Medium = 0
-	Membership_Fast = 0
-	
-	if(Closing_rate <= 3):
-		Membership_Slow = 1
-	if(Closing_rate > 3 and Closing_rate < 5):
-		Membership_Slow = round(-0.5 * Closing_rate + 2.5,3)
-	if(Closing_rate > 3 and Closing_rate < 5):
-		Membership_Medium = round(0.5 * Closing_rate - 1.5,3)
-	if(Closing_rate >= 5 and Closing_rate <= 6):
-		Membership_Medium = 1
-	if(Closing_rate > 6 and Closing_rate < 8):
-		Membership_Medium = round(-0.5 * Closing_rate + 4, 3)
-	if(Closing_rate > 6 and Closing_rate < 8):
-		Membership_Fast = round(0.5 * Closing_rate - 3,3)
-	if (Closing_rate >= 8): 
-			Membership_Fast = 1
-	
-	return (Membership_Slow, Membership_Medium, Membership_Fast)
+	else:
+		dist_to_wall = round(tracking_dist * math.sin(-angle),4)
+		
+	return dist_to_wall
 
-## Give a degree of membership for ditance; close or far ##
-def Fuzzy_Distance(Distance):	
-	## Step 2 -- Distance; close or far ##
-	Distance_Close = 0
-	Distance_Far = 0
-	if(Distance <= 300):
-		Distance_Close = 1
-	if(Distance > 300 and Distance < 500):
-		Distance_Close = round(-0.005 * Distance + 2.5,3)
-	if(Distance > 300 and Distance < 500):
-		Distance_Far = round(0.005 * Distance - 1.5,3)
-	if(Distance >= 500):
-		Distance_Far = 1
+# Calculate membership of distance to wall
+def fuzzy(distance_to_wall):	
 	
-	return(Distance_Close, Distance_Far)
+	# risk
+	close, med, far = 0, 0, 0
+	
+	if distance_to_wall <= 150:
+		close = -0.04 * distance_to_wall + 7
+	
+	elif distance_to_wall >= 150 and distance_to_wall <= 175:
+		close = -0.04 * distance_to_wall + 7
+		med = 0.01 * distance_to_wall - 1.5
+	
+	elif distance_to_wall >= 175 and  distance_to_wall <= 250:
+		med = 0.01 * distance_to_wall - 1.5
+		
+	elif distance_to_wall >= 250 and distance_to_wall <= 350:
+		med = 0.01 * distance_to_wall - 1.5
+		
+	elif distance_to_wall >= 350 and distance_to_wall <= 375:
+		med = 0.01 * distance_to_wall - 1.5
+		far = 0.02 * distance_to_wall - 7
+	
+	else:
+		far = 0.02 * distance_to_wall - 7
 
-## Fuzzy rules to determine output in terms of risks and defuzification ##
-def Fuzzy_Risk(Membership_Slow, Membership_Medium, Membership_Fast, Distance_Close, Distance_Far):
+	return close, med, far
 	
-	## Linguistic variable for output == risk ##
-	## risk can be either low, medium, high based off the inputs; distance, closing_rate ##
-	risk_low = 0
-	risk_medium = 0
-	risk_high = 0
+def defuzz(d1, d2, d3):
 	
-	if(Distance_Close > 0):
-		risk_high = Distance_Close
-	if(Membership_Slow > 0 and Distance_Close > 0):
-		risk_medium = min(Membership_Slow, Distance_Close)
-	if(Membership_Slow > 0 and Distance_Far > 0):
-		risk_low = min(Membership_Slow, Distance_Far)
-	if(Membership_Fast > 0 and Distance_Close > 0):
-		risk_high = min(Membership_Fast, Distance_Close)
-	if(Membership_Fast > 0 and Distance_Far > 0):
-		risk_medium = min(Membership_Fast, Distance_Far)
-	if(Membership_Medium > 0 and Distance_Far > 0):
-		risk_medium = min(Membership_Medium, Distance_Far)
-	if(Membership_Medium > 0 and Distance_Close > 0):
-		risk_high = min(Membership_Medium, Distance_Close)
-	if(Membership_Slow > 0 or Distance_Far > 0):
-		risk_low = max(Membership_Slow, Distance_Far)
+	# weights of risks
+	low = 20
+	med = 50
+	high = 80
+	total = (low * d1 + med * d2 + high * d3) / (d1 + d2 + d3)
 	
-	total_risk = (risk_low * 25 + risk_medium * 50 + risk_high * 75) / (risk_low + risk_medium + risk_high)
-	#print(total_risk)
-	
-	return total_risk
+	return total
 
 	

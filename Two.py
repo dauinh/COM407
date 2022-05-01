@@ -1,6 +1,6 @@
 #Sylvia Le, Linh Nguyen, Uyen Tran
 import libpyAI as ai
-from Fuzzy import * 
+from Program2_Fuzzy import * 
 
 def AI_loop():
   #Release keys

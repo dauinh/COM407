@@ -73,7 +73,7 @@ def AI_loop():
   # output = cog(risk_ranges, risk_weights)
   # print(output)
   
-  ######## PRODUCTION SYSTEMS ########
+  ######## PRODUCTION SY STEMS ########
   if ai.selfSpeed() <= 5 and (frontWall >= 100) and (left45Wall >= 100) and (right45Wall >= 100) and (right90Wall >= 100) and (left90Wall >= 100) and (left135Wall >= 35) and (right135Wall >= 35) and (backWall >= 35):
     ai.thrust(1)
   elif trackWall < 100:
@@ -92,11 +92,11 @@ def AI_loop():
     ai.turnLeft(1)
     
   # dodge
-  bulletDist = ai.shotDist(0)
+  bullet_dist = ai.shotDist(0)
   
-  if bulletDist < 100 and bulletDist > 0:
-    bulletAngle = ai.shotVelDir(0)
-    turn = (bulletAngle + 90) %360
+  if bullet_dist < 100 and bullet_dist > 0:
+    bullet_angle = ai.shotVelDir(0)
+    turn = (bullet_angle + 90) %360
     ai.turnToDeg(turn)
     if ai.selfSpeed() <= 20:
       ai.thrust(1)
@@ -115,7 +115,7 @@ def AI_loop():
     ai.turnToDeg(round(heading + alpha))
     
   ai.fireShot()
-  
+
   #for i in range(4):
   #  if ai.enemyDistance(i) > 9999:
   #    ai.turnRight(1)

@@ -1,5 +1,6 @@
 #Sylvia Le, Linh Nguyen, Uyen Tran
 import libpyAI as ai
+import math
 from Fuzzy import *
 
 def AI_loop():
@@ -69,8 +70,8 @@ def AI_loop():
   # defuzz
   risk_ranges = [near_slow, near_fast, far_slow, far_fast]
   risk_weights = [near_slowX, near_fastX, far_slowX, far_fastX]
-  output = cog(risk_ranges, risk_weights)
-  print(output)
+  # output = cog(risk_ranges, risk_weights)
+  # print(output)
   
   ######## PRODUCTION SYSTEMS ########
   if ai.selfSpeed() <= 5 and (frontWall >= 100) and (left45Wall >= 100) and (right45Wall >= 100) and (right90Wall >= 100) and (left90Wall >= 100) and (left135Wall >= 35) and (right135Wall >= 35) and (backWall >= 35):
@@ -103,13 +104,18 @@ def AI_loop():
     # print(turn)
     
   # aim
-  arr = []
-  val = 0
-  # distance between agent and closet enemy
-  closest = ai.enemyDistance(0)
-  if closest <= 1000:
-    ai.turnToDeg(ai.aimdir(0))
+  turn_speed = ai.getTurnSpeed()
+  enemy_dist = ai.enemyDistance(0)
+  enemy_vel = ai.enemySpeed(0)
+  alpha = abs(heading - ai.enemyTrackingDeg(0)) 
+  
+  if enemy_dist <= 1000:
+    x = (enemy_dist*math.sin(alpha)+enemy_vel*(alpha/turn_speed)) / (enemy_dist*math.cos(alpha))
+    turn_angle = (math.degrees(math.atan(x)) + heading) % 360
+    ai.turnToDeg(round(heading + alpha))
+    
   ai.fireShot()
+  
   #for i in range(4):
   #  if ai.enemyDistance(i) > 9999:
   #    ai.turnRight(1)

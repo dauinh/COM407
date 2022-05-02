@@ -34,8 +34,8 @@ def AI_loop():
   speed = ai.selfSpeed()
 
   # create membership functions
-  near = Membership(0, 150, True)
-  far = Membership(100, 250)
+  near = Membership(0, 50, True)
+  far = Membership(35, 75)
 
   slow = Membership(0, 10, True)
   fast = Membership(5, 20)
@@ -61,11 +61,6 @@ def AI_loop():
 
   far_fastX = min(wall_far, speed_fast)
   far_fast = high.clip(far_fastX, 1)
-  
-  # print(near_slow, near_slowX)
-  # print(near_fast, near_fastX)
-  # print(far_slow, far_slowX)
-  # print(far_fast, far_fastX)
 
   # defuzz
   risk_ranges = [near_slow, near_fast, far_slow, far_fast]
@@ -93,10 +88,12 @@ def AI_loop():
     
   # dodge
   bullet_dist = ai.shotDist(0)
-  
+  bullet_angle = abs(ai.shotVelDir(0) - heading)    # test this
+  # if bullet_angle == 90:
+  #   thrust
   if bullet_dist < 100 and bullet_dist > 0:
-    bullet_angle = ai.shotVelDir(0)
-    turn = (bullet_angle + 90) %360
+    
+    turn = (bullet_angle + 90) % 360
     ai.turnToDeg(turn)
     if ai.selfSpeed() <= 20:
       ai.thrust(1)
@@ -112,7 +109,7 @@ def AI_loop():
   if enemy_dist <= 1000:
     x = (enemy_dist*math.sin(alpha)+enemy_vel*(alpha/turn_speed)) / (enemy_dist*math.cos(alpha))
     turn_angle = (math.degrees(math.atan(x)) + heading) % 360
-    ai.turnToDeg(round(heading + alpha))
+    ai.turnToDeg(round(turn_angle)) 
     
   ai.fireShot()
 

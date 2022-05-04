@@ -1,5 +1,7 @@
-
-# Note: change rule evalutaion for bullet dodging and enemy shooting
+# Testing method: fuzzy system in main() => FuzzySystem() in main() => FuzzySystem() in xpilot
+# Note: 
+#   - change rule evaluaion for bullet dodging and enemy shooting
+#   - create parameter for FuzzySystem
 """Membership
 """
 class Membership():
@@ -16,10 +18,14 @@ class Membership():
 
   def calcY(self, x):
     res = round(self.a*x + self.b, 3)
-    if x <= self.xmin and self.isnegative:      # buggy
-      res = 1
-    elif x >= self.xmax and not self.isnegative:
-      res = 1
+    # input smaller than fuzzy range
+    if x <= self.xmin:
+      if self.isnegative: res = 1
+      else: res = 0
+    # input larger than fuzzy range
+    elif x >= self.xmax:
+      if self.isnegative: res = 0
+      else: res = 1
     return res
 
   def calcX(self, y):
@@ -34,25 +40,25 @@ class Membership():
 """
 class FuzzySystem():
 
-  def __init__(self):
+  def __init__(self, wall: list, speed: list, angle: list, risk: list):
     """
       create membership functions
     """
     # distance to walls
-    self.near = Membership(0, 150, True)
-    self.far = Membership(100, 250)
+    self.near = Membership(wall[0][0], wall[0][1], True)
+    self.far = Membership(wall[1][0], wall[1][1])
 
     # speed
-    self.slow = Membership(0, 10, True)
-    self.fast = Membership(5, 20)
+    self.slow = Membership(speed[0][0], speed[0][1], True)
+    self.fast = Membership(speed[1][0], speed[1][1])
 
     # angle
-    self.small = Membership(0, 90, True)
-    self.large = Membership(70, 180)
+    self.small = Membership(angle[0][0], angle[0][1], True)
+    self.large = Membership(angle[1][0], angle[1][1])
 
     # risk
-    self.low = Membership(0, 50, True)
-    self.high = Membership(15, 100)
+    self.low = Membership(risk[0][0], risk[0][1], True)
+    self.high = Membership(risk[1][0], risk[1][1])
 
   def wall_risk(self, wall, speed):
     """
@@ -167,22 +173,23 @@ def cog(ranges=[], weights=[]):
 
 
 def main():
-  system = FuzzySystem()
+  wall_range = [[100, 200], [120, 250]]
+  speed_range = [[0, 10], [5, 20]]
+  angle_range = [[0, 90], [70, 180]]
+  risk_range = [[0, 50], [30, 100]]
+  system = FuzzySystem(wall_range, speed_range, angle_range, risk_range)
   risk = system.wall_risk(50, 7)
   print(risk)
 
   # create membership functions
-  near = Membership(0, 150, True)
-  far = Membership(100, 250)
+  near = Membership(100, 200, True)
+  far = Membership(120, 250)
 
   slow = Membership(0, 10, True)
   fast = Membership(5, 20)
-  
-  small = Membership(0, 90, True)
-  large = Membership(70, 180)
 
   low = Membership(0, 50, True)
-  high = Membership(15, 100)
+  high = Membership(30, 100)
 
   # inputs
   wall = 50

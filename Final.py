@@ -1,7 +1,13 @@
 #Sylvia Le, Linh Nguyen, Uyen Tran
 import libpyAI as ai
 import math
-from Fuzzy import *
+from Fuzzy import FuzzySystem
+
+# attempts to fuzzy
+wall_range = [[0, 150], [100, 250]]
+speed_range = [[0, 10], [5, 20]]
+angle_range = [[0, 90], [70, 180]]
+risk_range = [[0, 35], [15, 100]]
 
 def AI_loop():
   # Release keys
@@ -25,7 +31,6 @@ def AI_loop():
   backWall = ai.wallFeeler(500,heading-180) 
   trackWall = ai.wallFeeler(500,tracking)
   
-  # attempts to fuzzy
   walls = [frontWall, left45Wall, right45Wall, left90Wall, right90Wall,
     left135Wall, right135Wall, leftBackWall, rightBackWall, backWall, trackWall]
 
@@ -33,40 +38,9 @@ def AI_loop():
   closest_wall = min(walls)
   speed = ai.selfSpeed()
 
-  # create membership functions
-  near = Membership(0, 50, True)
-  far = Membership(35, 75)
-
-  slow = Membership(0, 10, True)
-  fast = Membership(5, 20)
-
-  low = Membership(0, 50, True)
-  high = Membership(15, 100)
-
-  # fuzzify
-  wall_near = near.calcY(closest_wall)
-  wall_far = far.calcY(closest_wall)
-  speed_slow = slow.calcY(speed)
-  speed_fast = fast.calcY(speed)
-
-  # rule evaluation
-  near_slowX = min(wall_near, speed_slow)
-  near_slow = high.clip(near_slowX, 1)
-
-  near_fastX = min(wall_near, speed_fast)
-  near_fast = high.clip(near_fastX, 1)
-
-  far_slowX = min(wall_far, speed_slow)
-  far_slow = low.clip(1, far_slowX)
-
-  far_fastX = min(wall_far, speed_fast)
-  far_fast = high.clip(far_fastX, 1)
-
-  # defuzz
-  risk_ranges = [near_slow, near_fast, far_slow, far_fast]
-  risk_weights = [near_slowX, near_fastX, far_slowX, far_fastX]
-  # output = cog(risk_ranges, risk_weights)
-  # print(output)
+  system = FuzzySystem(wall_range, speed_range, angle_range, risk_range)
+  wall_risk = system.wall_risk(closest_wall, speed)
+  print(wall_risk)
   
   ######## PRODUCTION SY STEMS ########
   if ai.selfSpeed() <= 5 and (frontWall >= 100) and (left45Wall >= 100) and (right45Wall >= 100) and (right90Wall >= 100) and (left90Wall >= 100) and (left135Wall >= 35) and (right135Wall >= 35) and (backWall >= 35):

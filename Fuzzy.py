@@ -140,7 +140,7 @@ class FuzzySystem():
 
   def cog(self, ranges=[], weights=[]):
     weighted_sum = 0
-    divisor = 0
+    divisor = 1
     for i in range(4):
       n = int((ranges[i][1] - ranges[i][0]) // 10 )    # buggy
       divisor += weights[i] * n
@@ -157,7 +157,7 @@ class FuzzySystem():
 # Helper function to test in main
 def cog(ranges=[], weights=[]):
   weighted_sum = 0
-  divisor = 0
+  divisor = 1
   for i in range(4):
     n = int((ranges[i][1] - ranges[i][0]) // 10 )    # buggy
     divisor += weights[i] * n

@@ -63,11 +63,11 @@ def AI_loop():
   # WALL BEHAVIOR
   if risks['wall'] == highest:
     print('wall behavior')
-    if ai.selfSpeed() <= 5 and (frontWall >= 200) and (left45Wall >= 200) and (right45Wall >= 200) and (right90Wall >= 200) and (left90Wall >= 200) and (left135Wall >= 50) and (right135Wall >= 35) and (backWall >= 35):
+    if speed <= 5 and (frontWall >= 200) and (left45Wall >= 200) and (right45Wall >= 200) and (right90Wall >= 200) and (left90Wall >= 200) and (left135Wall >= 50) and (right135Wall >= 35) and (backWall >= 35):
       ai.thrust(1)
-    elif trackWall < 100:
+    elif speed <= 5 and trackWall < 100:
       ai.thrust(1)
-    elif backWall <= 50 or left135Wall <= 50 or right135Wall <= 50 or leftBackWall <= 50 or rightBackWall <= 50:
+    elif speed <= 5 and (backWall <= 50 or left135Wall <= 50 or right135Wall <= 50 or leftBackWall <= 50 or rightBackWall <= 50):
       ai.thrust(1)
     
 		# turn

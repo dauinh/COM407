@@ -63,22 +63,30 @@ def AI_loop():
   # WALL BEHAVIOR
   if risks['wall'] == highest:
     print('wall behavior')
+    # if back wall: thrust
     if speed <= 10 and (backWall <= 70 or left135Wall <= 50 or right135Wall <= 50 or leftBackWall <= 50 or rightBackWall <= 50):
-      ai.thrust(1)    
-    # turn
+      ai.thrust(1)
+    # if front wall:
+    #   if left wall: turn right
     if frontWall <= 300 and (left45Wall < right45Wall): 
       ai.turnRight(1)
-    elif left90Wall <= 200: 
-      ai.turnRight(1) 
-    elif frontWall <= 300 and (left45Wall > right45Wall):
+    #   turn left
+    elif frontWall <= 300:
       ai.turnLeft(1)
-    elif right90Wall <= 200:
-      ai.turnLeft(1)
+    # else: thrust    
+    if speed <= 10 and (frontWall >= 200) and (left45Wall >= 200) and (right45Wall >= 200) and (right90Wall >= 200) and (left90Wall >= 200) and (left135Wall >= 50) and (right135Wall >= 35) and (backWall >= 35):
+      ai.thrust(1)
+    if speed <= 10 and trackWall < 100 and heading != tracking:
+      ai.thrust(1)
+
+    # turn
     
-    elif speed <= 10 and (frontWall >= 200) and (left45Wall >= 200) and (right45Wall >= 200) and (right90Wall >= 200) and (left90Wall >= 200) and (left135Wall >= 50) and (right135Wall >= 35) and (backWall >= 35):
-      ai.thrust(1)
-    elif speed <= 10 and trackWall < 100:
-      ai.thrust(1)
+    # elif left90Wall <= 200: 
+    #   ai.turnRight(1) 
+    # elif frontWall <= 300 and (left45Wall > right45Wall):
+      
+    # elif right90Wall <= 200:
+    #   ai.turnLeft(1)
 
   # BULLET BEHAVIOR
   elif risks['bullet'] == highest:

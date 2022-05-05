@@ -99,13 +99,13 @@ class FuzzySystem():
     near_small = self.high.clip(near_smallX, 1)
 
     near_largeX = min(distance_near, angle_large)
-    near_large = self.high.clip(near_largeX, 1)
+    near_large = self.low.clip(1, near_largeX)
 
     far_smallX = min(distance_far, angle_small)
-    far_small = self.high.clip(far_smallX, 1)
+    far_small = self.low.clip(1, far_smallX)
 
     far_largeX = min(distance_far, angle_large)
-    far_large = self.high.clip(far_largeX, 1)
+    far_large = self.low.clip(1, far_largeX)
 
     risk_ranges = [near_small, near_large, far_small, far_large]
     risk_weights = [near_smallX, near_largeX, far_smallX, far_largeX]
@@ -125,13 +125,13 @@ class FuzzySystem():
     near_small = self.high.clip(near_smallX, 1)
 
     near_largeX = min(distance_near, angle_large)
-    near_large = self.high.clip(near_largeX, 1)
+    near_large = self.low.clip(1, near_largeX)
 
     far_smallX = min(distance_far, angle_small)
     far_small = self.high.clip(far_smallX, 1)
 
     far_largeX = min(distance_far, angle_large)
-    far_large = self.high.clip(far_largeX, 1)
+    far_large = self.low.clip(1, far_largeX)
 
     risk_ranges = [near_small, near_large, far_small, far_large]
     risk_weights = [near_smallX, near_largeX, far_smallX, far_largeX]
@@ -140,7 +140,7 @@ class FuzzySystem():
 
   def cog(self, ranges=[], weights=[]):
     weighted_sum = 0
-    divisor = 0
+    divisor = 1
     for i in range(4):
       n = int((ranges[i][1] - ranges[i][0]) // 10 )    # buggy
       divisor += weights[i] * n
@@ -157,7 +157,7 @@ class FuzzySystem():
 # Helper function to test in main
 def cog(ranges=[], weights=[]):
   weighted_sum = 0
-  divisor = 0
+  divisor = 1
   for i in range(4):
     n = int((ranges[i][1] - ranges[i][0]) // 10 )    # buggy
     divisor += weights[i] * n
@@ -178,7 +178,7 @@ def main():
   angle_range = [[0, 90], [70, 180]]
   risk_range = [[0, 50], [30, 100]]
   system = FuzzySystem(wall_range, speed_range, angle_range, risk_range)
-  risk = system.wall_risk(50, 7)
+  risk = system.bullet_risk(50, 7)
   print(risk)
 
   # create membership functions

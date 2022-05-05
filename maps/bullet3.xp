@@ -1,10 +1,10 @@
-# Created by ./xp-mapedit on Sat Apr 30 12:13:58 2022
+# Created by ./xp-mapedit on Thu May  5 17:16:19 2022
 
 oneplayeronly:no
 
-mapwidth : 32
-mapheight : 32
-mapname : bullet3
+mapwidth : 60
+mapheight : 60
+mapname : bullet2
 mapauthor : linh
 limitedlives : yes
 worldlives : 0
@@ -242,7 +242,7 @@ randomitemprob : 0.0
 asteroidprob : 0
 asteroidconcentratorprob : 0
 asteroiditemprob : 0.0
-shotkillscoremult : 2.0
+shotkillscoremult : 1.0
 torpedokillscoremult : 1.0
 smartkillscoremult : 1.0
 heatkillscoremult : 1.0
@@ -258,41 +258,69 @@ minescoremult : 0.17
 tankscoredecrement : 500
 asteroidpoints : 1.0
 asteroidmaxscore : 100.0
-cannonpoints : 2.0
+cannonpoints : 1.0
 cannonmaxscore : 100.0
 teamsharescore : no
 
 mapData: \multiline: EndOfMapdata
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-x    #        #     #       #  x
-x    c        c     c       c  x
-x      2         3             x
-x                         r    x
-x           4          2  #    x
-x   1                          x
-x#f               r            x
-x                d#f           x
-x      1   r      c        4   x
-x         d#f                  x
-x          c                   x
-x                 3          d#x
-x#f                            x
-x        3           r   4     x
-x              _    d#f        x
-x       r            c         x
-x      d#f                     x
-x       c                      x
-x                              x
-x          1        2      2   x
-x                              x
-x#f                   r        x
-x                    d#f       x
-x                     c        x
-x     2                   4  d#x
-x       r  3                   x
-x      d#f                     x
-x               1              x
-x   r     r        r    r      x
-x   #     #        #    #      x
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+x    #        #     #       #                              x
+x    c        c     c       c                              x
+x      2         3                                         x
+x                         r                                x
+x           4          2  #                                x
+x                                                          x
+x#f               r                                        x
+x                d#f                                       x
+x      1   r      c        4                               x
+x         d#f                                              x
+x          c                                               x
+x  0              3                                      d#x
+x#f                                                        x
+x        3           r   4                                 x
+x              _    d#f                                    x
+x       r            c                                     x
+x      d#f                                                 x
+x    34 c                                                  x
+x                                                          x
+x          1        2      2                               x
+x                                                          x
+x#f                   r                                    x
+x                    d#f                                   x
+x                     c                                  d#x
+x     2                   4                                x
+x       r  3                                               x
+x      d#f                                                 x
+x               1                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x                                                          x
+x   r     r        r    r                                  x
+x   #     #        #    #                                  x
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 EndOfMapdata

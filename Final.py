@@ -1,6 +1,5 @@
 #Sylvia Le, Linh Nguyen, Uyen Tran
 import libpyAI as ai
-import math
 from Fuzzy import FuzzySystem
 
 # attempts to fuzzy

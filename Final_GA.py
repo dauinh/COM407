@@ -1,6 +1,8 @@
+from doctest import testfile
 import subprocess as sub
 import random
 from random import choices
+import time
 
 GEN = 100       # number of generations
 POPULATION = 10       # size of population
@@ -9,12 +11,20 @@ CROSSOVER_PROB = 1
 MUTATE_PROB = 0.001
 
 # Uyen
-def binary2decimal():
-  pass
+def binary2decimal(chrom):
+
+  res = []
+  for i in range(0, 24, 6):
+    r = chrom[i:i+6]
+    r = int(''.join([str(j) for j in r]), 2)
+
+    res.append(r)
+  
+  return res
 
 
-def fitness(chrom):
-  return sum(chrom)
+def fitness(start, end):
+  return end - start
 
 
 def initial_gen():
@@ -88,18 +98,27 @@ def GA():
   # generations = []
 
   for i in range(GEN):
-    # Sylvia
-    # insert value into Final.py
 
     # DO THIS
     fitness_list = []
     new_pop = []
     for j in range(len(pop)):
+
+      # Sylvia
+      # insert value into Final.py
+      template = open('agent_template.txt', 'r').read()
+      vals = binary2decimal(pop[j])
+      agent = template.format(*tuple(vals))
+      testfile = open('agent.py', 'w')
+      testfile.write(agent)
+
       # test this
       p1 = sub.Popen("./xpilots -map maps/simple.xp -noQuit -switchBase 1 -gameDuration 1", shell=True)
-      p2 = sub.Popen("python3 Final.py", shell=True)
+      start_time = time.time()
+      p2 = sub.Popen("python3 agent.py", shell=True)
+      end_time = time.time()
       # cal total time
-      x = fitness(pop[j])
+      x = fitness(end_time, start_time)
       fitness_list.append(x)
     
     # data.append(sum(fitness_list)/len(pop))

@@ -4,8 +4,8 @@ import random
 from random import choices
 import time
 
-GEN = 100       # number of generations
-POPULATION = 10       # size of population
+GEN = 2       # number of generations
+POPULATION = 5       # size of population
 CHROMOSOME = 24     # size of chromosome
 CROSSOVER_PROB = 1
 MUTATE_PROB = 0.001
@@ -114,30 +114,30 @@ def GA():
 
       # test this
       p1 = sub.Popen("./xpilots -map maps/simple.xp -noQuit -switchBase 1 -gameDuration 1", shell=True)
-      start_time = time.time()
       p2 = sub.Popen("python3 agent.py", shell=True)
-      end_time = time.time()
       # cal total time
-      x = fitness(end_time, start_time)
-      fitness_list.append(x)
+      #x = fitness(end_time, start_time)
+      #fitness_list.append(x)
     
     # data.append(sum(fitness_list)/len(pop))
     # generations.append(i)
 
-    best = fitness_list.index(max(fitness_list))
-    elite = pop[best]
-    new_pop.append(elite)
+    #best = fitness_list.index(max(fitness_list))
+    #elite = pop[best]
+    #new_pop.append(elite)
 
 
     # Generate new population
-    while(len(new_pop) < POPULATION):
+    #while(len(new_pop) < POPULATION):
       # Select 2 chromosomes
-      parents = select(pop, fitness_list)
+      #parents = select(pop, fitness_list)
       # Generate new child
-      children = breed(parents)
-      new_pop.append(children[0])
-      new_pop.append(children[1])
+      #children = breed(parents)
+      #new_pop.append(children[0])
+      #new_pop.append(children[1])
 
-    pop = new_pop
+    #pop = new_pop
 
-  return pop
+  #return pop
+
+GA()

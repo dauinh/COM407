@@ -3,7 +3,7 @@ import libpyAI as ai
 from Fuzzy import FuzzySystem
 
 # attempts to fuzzy
-wall_range = [[100, 300], [200, 500]]
+wall_range = [[62, 29], [33, 25]]
 speed_range = [[0, 10], [5, 20]]
 angle_range = [[20, 30], [20, 40]]
 risk_range = [[0, 30], [25, 100]]
@@ -54,14 +54,14 @@ def AI_loop():
   #print('wall risk: ', wall_risk)
   #print('bullet risk: ', bullet_risk)
   #print('enemy risk: ', enemy_risk)
-  print()
+  #print()
   
   risks = {'wall': wall_risk, 'bullet': bullet_risk, 'enemy': enemy_risk}
   highest = max(risks.values())
   
   # WALL BEHAVIOR
   if risks['wall'] == highest:
-    print('wall behavior')
+    #print('wall behavior')
     # if back wall: thrust
     if speed <= 10 and (backWall <= 70 or left135Wall <= 100 or right135Wall <= 100 or leftBackWall <= 100 or rightBackWall <= 100):
       ai.thrust(1)
@@ -82,10 +82,9 @@ def AI_loop():
     if speed <= 10 and (frontWall >= 200) and (left45Wall >= 200) and (right45Wall >= 200) and (right90Wall >= 200) and (left90Wall >= 200) and (left135Wall >= 50) and (right135Wall >= 50) and (backWall >= 35):
       ai.thrust(1)
 
-
   # BULLET BEHAVIOR
   elif risks['bullet'] == highest:
-    print('bullet behavior')
+    #print('bullet behavior')
     if bullet_angle <= 110 and bullet_angle >= 70:
       ai.thrust(1)
     if bullet_dist < 100 and bullet_dist > 0:
@@ -98,11 +97,11 @@ def AI_loop():
       
   # ENEMY BEHAVIOR
   elif risks['enemy'] == highest:
-    print('enemy behavior')    
+    #print('enemy behavior')    
     if enemy_dist <= 1000:
       ai.setTurnSpeed(60)
       ai.turnToDeg(int(enemy_angle))
     ai.fireShot()
-  print('----------------')
+  #print('----------------')
 
 ai.start(AI_loop,["-name","Final","-join","localhost"])

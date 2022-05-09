@@ -56,7 +56,7 @@ def AI_loop():
   print('enemy risk: ', enemy_risk)
   print()
   
-  risks = {'wall': wall_risk, 'bullet': bullet_risk, 'enemy': enemy_risk}
+  risks = {{'wall': wall_risk, 'bullet': bullet_risk, 'enemy': enemy_risk}}
   highest = max(risks.values())
   
   # WALL BEHAVIOR
@@ -64,6 +64,8 @@ def AI_loop():
     print('wall behavior')
     # if back wall: thrust
     if speed <= 10 and (backWall <= 70 or left135Wall <= 100 or right135Wall <= 100 or leftBackWall <= 100 or rightBackWall <= 100):
+      ai.thrust(1)
+    elif trackWall < 100:
       ai.thrust(1)
     # if front wall:
     #   if left wall: turn right
@@ -79,17 +81,6 @@ def AI_loop():
     # else: thrust    
     if speed <= 10 and (frontWall >= 200) and (left45Wall >= 200) and (right45Wall >= 200) and (right90Wall >= 200) and (left90Wall >= 200) and (left135Wall >= 50) and (right135Wall >= 50) and (backWall >= 35):
       ai.thrust(1)
-    if speed <= 10 and trackWall < 100 and heading != tracking:
-      ai.thrust(1)
-
-    # turn
-    
-    # elif left90Wall <= 200: 
-    #   ai.turnRight(1) 
-    # elif frontWall <= 300 and (left45Wall > right45Wall):
-      
-    # elif right90Wall <= 200:
-    #   ai.turnLeft(1)
 
   # BULLET BEHAVIOR
   elif risks['bullet'] == highest:
@@ -106,23 +97,7 @@ def AI_loop():
       
   # ENEMY BEHAVIOR
   elif risks['enemy'] == highest:
-    print('enemy behavior')
-    #~ turn_speed = ai.getTurnSpeed()
-    #~ enemy_vel = ai.enemySpeed(0)
-    #~ gamma = ai.enemyTrackingDeg(0) % 90
-    
-    #~ enemy_velX = enemy_vel * math.cos(gamma)
-    #~ enemy_velY = enemy_vel * math.sin(gamma)
-    
-    #~ rel_enemy_velX =  enemy_velX - ai.selfVelX()
-    #~ rel_enemy_velY = enemy_velY - ai.selfVelY()
-    
-    #~ rel_enemy_vel = math.sqrt((rel_enemy_velX)**2+(rel_enemy_velY)**2)
-    #~ if enemy_dist <= 1000:
-      #~ x = (enemy_dist*math.sin(alpha)+rel_enemy_vel*(alpha/turn_speed)) / (enemy_dist*math.cos(alpha))
-      #~ turn_angle = (math.degrees(math.atan(x)) + heading) % 360
-      #~ ai.turnToDeg(round(turn_angle))
-    
+    print('enemy behavior')    
     if enemy_dist <= 1000:
       ai.setTurnSpeed(60)
       ai.turnToDeg(int(enemy_angle))

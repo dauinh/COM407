@@ -5,7 +5,7 @@ from random import choices
 import time
 
 GEN = 2       # number of generations
-POPULATION = 5       # size of population
+POPULATION = 1       # size of population
 CHROMOSOME = 24     # size of chromosome
 CROSSOVER_PROB = 1
 MUTATE_PROB = 0.001

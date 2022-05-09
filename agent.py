@@ -3,7 +3,7 @@ import libpyAI as ai
 from Fuzzy import FuzzySystem
 
 # attempts to fuzzy
-wall_range = [[62, 29], [33, 25]]
+wall_range = [[51, 52], [27, 44]]
 speed_range = [[0, 10], [5, 20]]
 angle_range = [[20, 30], [20, 40]]
 risk_range = [[0, 30], [25, 100]]

@@ -113,13 +113,14 @@ def GA():
       testfile.write(agent)
 
       # test this
-      p1 = sub.Popen("./xpilots -map maps/simple.xp -noQuit -switchBase 1 -gameDuration 1", shell=True)
-      start_time = time.time()
-      p2 = sub.Popen("python3 agent.py", shell=True)
-      end_time = time.time()
+      p1 = sub.run("./xpilots -map maps/simple.xp -noQuit -switchBase 1 -gameDuration 1", shell=True)
+      #start_time = time.time()
+      p2 = sub.run("python3 agent.py", shell=True)
+      sub.run("pkill xpilots", shell=True)
+      #end_time = time.time()
       # cal total time
-      x = fitness(end_time, start_time)
-      fitness_list.append(x)
+      #x = fitness(end_time, start_time)
+      #fitness_list.append(x)
     
     # data.append(sum(fitness_list)/len(pop))
     # generations.append(i)

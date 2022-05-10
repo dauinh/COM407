@@ -113,10 +113,13 @@ def GA():
       testfile.write(agent)
 
       # test this
-      p1 = sub.run("./xpilots -map maps/simple.xp -noQuit -switchBase 1 -gameDuration 1", shell=True)
+      try:
+        p1 = sub.Popen("./xpilots -map maps/simple.xp -noQuit -switchBase 1 -gameDuration 1", shell=True)
       #start_time = time.time()
-      p2 = sub.run("python3 agent.py", shell=True)
-      sub.run("pkill xpilots", shell=True)
+        p2 = sub.run("python3 agent.py", shell=True)
+      except Exception as e:
+        sub.run("pkill xpilots", shell=True)
+        print("Error:", e)
       #end_time = time.time()
       # cal total time
       #x = fitness(end_time, start_time)

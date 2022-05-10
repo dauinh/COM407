@@ -8,6 +8,8 @@ speed_range = [[0, 10], [5, 20]]
 angle_range = [[20, 30], [20, 40]]
 risk_range = [[0, 30], [25, 100]]
 
+score = 0
+
 def AI_loop():
   # Release keys
   ai.thrust(0)
@@ -15,6 +17,11 @@ def AI_loop():
   ai.turnRight(0)
   ai.setTurnSpeed(35)
   ai.setPower(40)
+
+  score = ai.selfScore()
+  file = open('agentScore.txt', 'w')
+  file.write(str(score))
+  file.close()
   
   # find walls
   heading = int(ai.selfHeadingDeg())

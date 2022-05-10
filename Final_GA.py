@@ -4,8 +4,8 @@ import random
 from random import choices
 import time
 
-GEN = 100       # number of generations
-POPULATION = 10       # size of population
+GEN = 2       # number of generations
+POPULATION = 2       # size of population
 CHROMOSOME = 24     # size of chromosome
 CROSSOVER_PROB = 1
 MUTATE_PROB = 0.001
@@ -23,8 +23,11 @@ def binary2decimal(chrom):
   return res
 
 
-def fitness(start, end):
-  return end - start
+def fitness():
+  f = open('agentScore.txt', 'r').read()
+  if f == "":
+    return -1000
+  return float(f)
 
 
 def initial_gen():
@@ -115,15 +118,13 @@ def GA():
       # test this
       try:
         p1 = sub.Popen("./xpilots -map maps/simple.xp -noQuit -switchBase 1 -gameDuration 1", shell=True)
-      #start_time = time.time()
         p2 = sub.run("python3 agent.py", shell=True)
       except Exception as e:
         sub.run("pkill xpilots", shell=True)
         print("Error:", e)
-      #end_time = time.time()
-      # cal total time
-      #x = fitness(end_time, start_time)
-      #fitness_list.append(x)
+
+      x = fitness()
+      fitness_list.append(x)
     
     # data.append(sum(fitness_list)/len(pop))
     # generations.append(i)
@@ -144,4 +145,13 @@ def GA():
 
     pop = new_pop
 
-  return pop
+  outfile = open('final_pop.txt', 'w', encoding='utf8')
+  fin = ''
+  for i in range(len(pop)):
+  	chromo = ''
+    for j in range(CHROMOSOME):
+      chromo += str(pop[i][j])
+    fin += chromo + '\n\n'
+  outfile.write(fin)
+
+GA()

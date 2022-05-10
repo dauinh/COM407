@@ -1,12 +1,15 @@
 #Sylvia Le, Linh Nguyen, Uyen Tran
 import libpyAI as ai
 from Fuzzy import FuzzySystem
+import time
 
 # attempts to fuzzy
 wall_range = [[{0}, {1}], [{2}, {3}]]
 speed_range = [[0, 10], [5, 20]]
 angle_range = [[20, 30], [20, 40]]
 risk_range = [[0, 30], [25, 100]]
+
+start_time = time.time()
 
 def AI_loop():
   # Release keys
@@ -15,6 +18,16 @@ def AI_loop():
   ai.turnRight(0)
   ai.setTurnSpeed(35)
   ai.setPower(40)
+  
+  cur_time = time.time()
+  duration = cur_time - start_time
+  if duration > 60:
+    ai.quitAI()
+  
+  score = ai.selfScore()
+  file = open('agentScore.txt', 'w')
+  file.write(str(score))
+  file.close()
   
   # find walls
   heading = int(ai.selfHeadingDeg())

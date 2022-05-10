@@ -4,8 +4,8 @@ import random
 from random import choices
 import time
 
-GEN = 2       # number of generations
-POPULATION = 1       # size of population
+GEN = 10       # number of generations
+POPULATION = 10       # size of population
 CHROMOSOME = 24     # size of chromosome
 CROSSOVER_PROB = 1
 MUTATE_PROB = 0.001
@@ -23,8 +23,11 @@ def binary2decimal(chrom):
   return res
 
 
-def fitness(start, end):
-  return end - start
+def fitness():
+  f = open('agentScore.txt', 'r').read()
+  if f == "":
+    return -1000
+  return float(f)
 
 
 def initial_gen():
@@ -96,6 +99,8 @@ def GA():
   pop = initial_gen()
   # data = []
   # generations = []
+  p1 = sub.Popen("./xpilots -map maps/simple.xp -noQuit -switchBase 1 +teamPlay -reset -worldLives 1 -limitedLives", shell=True)
+  #sub.run("python3 Test.py", shell=True)
 
   for i in range(GEN):
 
@@ -103,6 +108,9 @@ def GA():
     fitness_list = []
     new_pop = []
     for j in range(len(pop)):
+      print('gen:', i)
+      print('chromosome:', j)
+      print()
 
       # Sylvia
       # insert value into Final.py
@@ -113,11 +121,14 @@ def GA():
       testfile.write(agent)
 
       # test this
-      p1 = sub.Popen("./xpilots -map maps/simple.xp -noQuit -switchBase 1 -gameDuration 1", shell=True)
-      p2 = sub.Popen("python3 agent.py", shell=True)
-      # cal total time
-      #x = fitness(end_time, start_time)
-      #fitness_list.append(x)
+      try:
+        p2 = sub.run("python3 agent.py & python3 Test.py", shell=True)
+      except Exception as e:
+        sub.run("pkill xpilots", shell=True)
+        print("Error:", e)
+
+      x = fitness()
+      fitness_list.append(x)
     
     # data.append(sum(fitness_list)/len(pop))
     # generations.append(i)
@@ -138,6 +149,13 @@ def GA():
 
     #pop = new_pop
 
-  #return pop
+  #outfile = open('final_pop.txt', 'w', encoding='utf8')
+  #fin = ''
+  #for i in range(len(pop)):
+  #	chromo = ''
+  #  for j in range(CHROMOSOME):
+  #    chromo += str(pop[i][j])
+  #  fin += chromo + '\n\n'
+  #outfile.write(fin)
 
 GA()

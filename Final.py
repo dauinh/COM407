@@ -82,7 +82,6 @@ def AI_loop():
     if speed <= 10 and (frontWall >= 200) and (left45Wall >= 200) and (right45Wall >= 200) and (right90Wall >= 200) and (left90Wall >= 200) and (left135Wall >= 50) and (right135Wall >= 50) and (backWall >= 35):
       ai.thrust(1)
 
-
   # BULLET BEHAVIOR
   elif risks['bullet'] == highest:
     print('bullet behavior')

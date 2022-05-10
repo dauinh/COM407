@@ -1,6 +1,7 @@
 #Sylvia Le, Linh Nguyen, Uyen Tran
 import libpyAI as ai
 from Fuzzy import FuzzySystem
+import time
 
 # attempts to fuzzy
 wall_range = [[{0}, {1}], [{2}, {3}]]
@@ -8,7 +9,7 @@ speed_range = [[0, 10], [5, 20]]
 angle_range = [[20, 30], [20, 40]]
 risk_range = [[0, 30], [25, 100]]
 
-score = 0
+start_time = time.time()
 
 def AI_loop():
   # Release keys
@@ -17,7 +18,12 @@ def AI_loop():
   ai.turnRight(0)
   ai.setTurnSpeed(35)
   ai.setPower(40)
-
+  
+  cur_time = time.time()
+  duration = cur_time - start_time
+  if duration > 60:
+    ai.quitAI()
+  
   score = ai.selfScore()
   file = open('agentScore.txt', 'w')
   file.write(str(score))
@@ -58,17 +64,17 @@ def AI_loop():
   bullet_risk = system.bullet_risk(ai.shotDist(0), bullet_angle)
   enemy_risk = system.enemy_risk(enemy_dist, enemy_angle)
   
-  print('wall risk: ', wall_risk)
-  print('bullet risk: ', bullet_risk)
-  print('enemy risk: ', enemy_risk)
-  print()
+  #print('wall risk: ', wall_risk)
+  #print('bullet risk: ', bullet_risk)
+  #print('enemy risk: ', enemy_risk)
+  #print()
   
   risks = {{'wall': wall_risk, 'bullet': bullet_risk, 'enemy': enemy_risk}}
   highest = max(risks.values())
   
   # WALL BEHAVIOR
   if risks['wall'] == highest:
-    print('wall behavior')
+    #print('wall behavior')
     # if back wall: thrust
     if speed <= 10 and (backWall <= 70 or left135Wall <= 100 or right135Wall <= 100 or leftBackWall <= 100 or rightBackWall <= 100):
       ai.thrust(1)
@@ -91,7 +97,7 @@ def AI_loop():
 
   # BULLET BEHAVIOR
   elif risks['bullet'] == highest:
-    print('bullet behavior')
+    #print('bullet behavior')
     if bullet_angle <= 110 and bullet_angle >= 70:
       ai.thrust(1)
     if bullet_dist < 100 and bullet_dist > 0:
@@ -104,11 +110,11 @@ def AI_loop():
       
   # ENEMY BEHAVIOR
   elif risks['enemy'] == highest:
-    print('enemy behavior')    
+    #print('enemy behavior')    
     if enemy_dist <= 1000:
       ai.setTurnSpeed(60)
       ai.turnToDeg(int(enemy_angle))
     ai.fireShot()
-  print('----------------')
+  #print('----------------')
 
 ai.start(AI_loop,["-name","Final","-join","localhost"])

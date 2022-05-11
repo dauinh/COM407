@@ -10,9 +10,6 @@ def AI_loop():
   
   mess = ai.scanGameMsg(0)
   if 'Final left' in mess:
-    print('MESS')
-    print(mess)
-    print()
     ai.quitAI()
   
   #find walls

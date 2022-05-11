@@ -3,23 +3,46 @@ import subprocess as sub
 import random
 from random import choices
 import time
+import csv
 
-GEN = 10       # number of generations
-POPULATION = 10       # size of population
-CHROMOSOME = 24     # size of chromosome
+GEN = 100       # number of generations
+POPULATION = 20       # size of population
+CHROMOSOME = 100     # size of chromosome
 CROSSOVER_PROB = 1
 MUTATE_PROB = 0.001
 
 # Uyen
 def binary2decimal(chrom):
-
+	#wall: 6 bit; speed: 6 bit; angle: 6bit; risk 7 bit
   res = []
+	#wall
   for i in range(0, 24, 6):
-    r = chrom[i:i+6]
+    w = chrom[i:i+6]
+    w = int(''.join([str(j) for j in w]), 2)
+
+    res.append(w*10)
+
+  #speed
+  for i in range(24, 48, 6):
+    s = chrom[i:i+6]
+    s = int(''.join([str(j) for j in s]), 2)
+
+    res.append(s)
+
+	#angle scale to 6
+  for i in range(48, 72, 6):
+    a = chrom[i:i+6]
+    a = int(''.join([str(j) for j in a]), 2)
+
+    res.append(a*6)
+
+	#risk 2^7
+  for i in range(72, 100, 7):
+    r = chrom[i:i+7]
     r = int(''.join([str(j) for j in r]), 2)
 
     res.append(r)
-  
+
   return res
 
 
@@ -95,6 +118,11 @@ def select(population, fitness_list):
   return parents
 
 def GA():
+  results = open('results.csv', 'w')
+  csv_writer = csv.writer(results)
+  headers = ['Generation','Id','Chromosome','Fitness']
+  csv_writer.writerow(headers)
+
   # Generate a population
   pop = initial_gen()
   # data = []
@@ -129,6 +157,11 @@ def GA():
 
       x = fitness()
       fitness_list.append(x)
+      chromo = ''
+      for k in range(len(pop[j])):
+        chromo += str(pop[j][k])
+      agent = [str(i), str(j), chromo, str(x)]
+      csv_writer.writerow(agent)
     
     # data.append(sum(fitness_list)/len(pop))
     # generations.append(i)
@@ -139,23 +172,23 @@ def GA():
 
 
     # Generate new population
-    #while(len(new_pop) < POPULATION):
+    while(len(new_pop) < POPULATION):
       # Select 2 chromosomes
-      #parents = select(pop, fitness_list)
+      parents = select(pop, fitness_list)
       # Generate new child
-      #children = breed(parents)
-      #new_pop.append(children[0])
-      #new_pop.append(children[1])
+      children = breed(parents)
+      new_pop.append(children[0])
+      new_pop.append(children[1])
 
-    #pop = new_pop
+    pop = new_pop
 
-  #outfile = open('final_pop.txt', 'w', encoding='utf8')
-  #fin = ''
-  #for i in range(len(pop)):
-  #	chromo = ''
-  #  for j in range(CHROMOSOME):
-  #    chromo += str(pop[i][j])
-  #  fin += chromo + '\n\n'
-  #outfile.write(fin)
+  outfile = open('final_pop.txt', 'w', encoding='utf8')
+  fin = ''
+  for i in range(len(pop)):
+    chromo = ''
+    for j in range(CHROMOSOME):
+      chromo += str(pop[i][j])
+    fin += chromo + '\n\n'
+  outfile.write(fin)
 
 GA()

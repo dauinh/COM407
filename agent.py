@@ -4,10 +4,12 @@ from Fuzzy import FuzzySystem
 import time
 
 # attempts to fuzzy
-wall_range = [[43, 7], [45, 63]]
-speed_range = [[0, 10], [5, 20]]
-angle_range = [[20, 30], [20, 40]]
-risk_range = [[0, 30], [25, 100]]
+wall_range = [[0, 610], [350, 380]]
+speed_range = [[40, 23], [40, 15]]
+angle_range = [[264, 222], [348, 378]]
+risk_range = [[37, 71], [100, 60]]
+
+start_time = time.time()
 
 def AI_loop():
   # Release keys
@@ -16,13 +18,11 @@ def AI_loop():
   ai.turnRight(0)
   ai.setTurnSpeed(35)
   ai.setPower(40)
-
+  
   cur_time = time.time()
   duration = cur_time - start_time
   if duration > 60:
     ai.quitAI()
-  #if ai.selfLives() == 0:
-  #  ai.quitAI()
   
   score = ai.selfScore()
   file = open('agentScore.txt', 'w')

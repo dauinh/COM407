@@ -5,9 +5,9 @@ import time
 
 # attempts to fuzzy
 wall_range = [[{0}, {1}], [{2}, {3}]]
-speed_range = [[0, 10], [5, 20]]
-angle_range = [[20, 30], [20, 40]]
-risk_range = [[0, 30], [25, 100]]
+speed_range = [[{4}, {5}], [{6}, {7}]]
+angle_range = [[{8}, {9}], [{10}, {11}]]
+risk_range = [[{12}, {13}], [{14}, {15}]]
 
 start_time = time.time()
 

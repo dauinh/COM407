@@ -4,10 +4,10 @@ from Fuzzy import FuzzySystem
 import time
 
 # attempts to fuzzy
-wall_range = [[0, 610], [350, 380]]
-speed_range = [[40, 23], [40, 15]]
-angle_range = [[264, 222], [348, 378]]
-risk_range = [[37, 71], [100, 60]]
+wall_range = [[20, 460], [120, 600]]
+speed_range = [[25, 34], [23, 51]]
+angle_range = [[40, 70], [115, 130]]
+risk_range = [[73, 94], [8, 124]]
 
 start_time = time.time()
 
@@ -117,4 +117,4 @@ def AI_loop():
     ai.fireShot()
   #print('----------------')
 
-ai.start(AI_loop,["-name","Final","-join","localhost"])
+ai.start(AI_loop,["-name","Final","-join","localhost"]))

@@ -34,7 +34,7 @@ def binary2decimal(chrom):
     a = chrom[i:i+6]
     a = int(''.join([str(j) for j in a]), 2)
 
-    res.append(a*6)
+    res.append(a*5)
 
 	#risk 2^7
   for i in range(72, 100, 7):
@@ -43,6 +43,9 @@ def binary2decimal(chrom):
 
     res.append(r)
 
+  for i in range(1, 100, 2):
+	  res[i] = res[i] + res[i-1]
+  
   return res
 
 

@@ -15,7 +15,7 @@ MUTATE_PROB = 0.001
 def binary2decimal(chrom):
 	#wall: 6 bit; speed: 6 bit; angle: 6bit; risk 7 bit
   res = []
-	#wall: [10, 640]
+	#wall: [10, 631]
   for i in range(0, 24, 6):
     w = chrom[i:i+6]
     w = int(''.join([str(j) for j in w]), 2)
@@ -29,7 +29,7 @@ def binary2decimal(chrom):
 
     res.append(1+s)
 
-	#angle: [1, 320]
+	#angle: [1, 316]
   for i in range(48, 72, 6):
     a = chrom[i:i+6]
     a = int(''.join([str(j) for j in a]), 2)

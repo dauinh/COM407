@@ -17,7 +17,7 @@ def AI_loop():
   ai.turnLeft(0)
   ai.turnRight(0)
   ai.setTurnSpeed(35)
-  ai.setPower(40)
+  #ai.setPower(40)
   
   cur_time = time.time()
   duration = cur_time - start_time
@@ -104,7 +104,7 @@ def AI_loop():
       turn = (bullet_angle + 90) % 360
       ai.turnToDeg(turn)
       if ai.selfSpeed() <= 10:
-        ai.setPower(30)
+        #ai.setPower(30)
         ai.thrust(1)
         #ai.emergencyThrust()
       

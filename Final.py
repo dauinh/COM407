@@ -4,15 +4,19 @@ import libpyAI as ai
 from Fuzzy import FuzzySystem
 
 # attempts to fuzzy
-wall_range = [[100, 300], [200, 500]]
-speed_range = [[0, 10], [5, 20]]
+wall_range = [[120, 400], [250, 500]]
+speed_range = [[0, 5], [5, 20]]
 angle_range = [[20, 30], [20, 40]]
 risk_range = [[0, 30], [25, 100]]
 
 # to use in production system
+nearest = wall_range[0][0]
 near = wall_range[0][1]
 far = wall_range[1][0]
 farthest = wall_range[1][1]     # farthest range agent can detect
+
+slow = speed_range[0][1]
+
 
 def AI_loop():
   # Release keys
@@ -38,14 +42,10 @@ def AI_loop():
   backWall = ai.wallFeeler(farthest,heading-180) 
   trackWall = ai.wallFeeler(farthest,tracking)
   
-  # walls = [frontWall, left45Wall, right45Wall, left90Wall, right90Wall,
-    # left135Wall, right135Wall, leftBackWall, rightBackWall, backWall, trackWall]
+  walls = [frontWall, left45Wall, right45Wall, left90Wall, right90Wall,
+    left135Wall, right135Wall, leftBackWall, rightBackWall, backWall, trackWall]
   front_walls = [frontWall, left45Wall, right45Wall]
   back_walls = [left135Wall, right135Wall, leftBackWall, rightBackWall, backWall]
-  walls = front_walls + back_walls
-  walls.append(left90Wall)
-  walls.append(right90Wall)
-  walls.append(trackWall)
 
   # inputs
   closest_wall = min(walls)
@@ -75,12 +75,13 @@ def AI_loop():
   if risks['wall'] == highest:
     print('wall behavior')
     # thrust
-    if system.is_any_near(back_walls, near):
+    if system.is_any_near(back_walls, nearest):
       ai.thrust(1)
-    elif trackWall < near:
+      print('1')
+    elif trackWall < nearest and system.is_all_far(front_walls, far):
       ai.thrust(1)
-    elif speed <= 10 and system.is_all_far(front_walls, far):
-      ai.thrust(1)
+      print('2')
+
 
     # turn
     if frontWall <= farthest and (left45Wall < right45Wall): 
@@ -91,16 +92,18 @@ def AI_loop():
       ai.turnLeft(1)
     elif right90Wall <= far:
       ai.turnLeft(1)
+      
+    if speed <= slow and system.is_all_far(front_walls, near):
+      ai.thrust(1)
+      print('3')
 
   # BULLET BEHAVIOR
   elif risks['bullet'] == highest:
     print('bullet behavior')
-    if bullet_angle <= 110 and bullet_angle >= 70:
-      ai.thrust(1)
-    if bullet_dist < 100 and bullet_dist > 0:
+    if bullet_angle <= 110 and bullet_angle >= 70 and bullet_dist <=near and bullet_dist > 0:
       turn = (bullet_angle + 90) % 360
       ai.turnToDeg(turn)
-      if ai.selfSpeed() <= 10:
+      if ai.selfSpeed() <= slow:
         #ai.setPower(30)
         ai.thrust(1)
         #ai.emergencyThrust()
@@ -108,7 +111,7 @@ def AI_loop():
   # ENEMY BEHAVIOR
   elif risks['enemy'] == highest:
     print('enemy behavior')    
-    if enemy_dist <= 1000:
+    if enemy_dist <= farthest:
       ai.setTurnSpeed(60)
       ai.turnToDeg(int(enemy_angle))
     ai.fireShot()

@@ -72,7 +72,7 @@ class FuzzySystem():
 
   def is_all_far(self, walls: list, far: int):
     for w in walls:
-      if w >= far:
+      if w <= far:
         return False
     return True
 

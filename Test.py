@@ -1,6 +1,9 @@
 #Sylvia Le, Linh Nguyen, Uyen Tran
 import libpyAI as ai
-from Program2_Fuzzy import * 
+from Program2_Fuzzy import *
+import time
+
+start_time = time.time()
 
 def AI_loop():
   #Release keys
@@ -8,8 +11,9 @@ def AI_loop():
   ai.turnLeft(0)
   ai.turnRight(0)
   
-  mess = ai.scanGameMsg(0)
-  if 'Final left' in mess:
+  cur_time = time.time()
+  duration = cur_time - start_time
+  if duration > 60:
     ai.quitAI()
   
   #find walls

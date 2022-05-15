@@ -4,10 +4,10 @@ from Fuzzy import FuzzySystem
 import time
 
 # attempts to fuzzy
-wall_range = [[0, 610], [350, 380]]
-speed_range = [[40, 23], [40, 15]]
-angle_range = [[264, 222], [348, 378]]
-risk_range = [[37, 71], [100, 60]]
+wall_range = [[521, 942], [311, 422]]
+speed_range = [[16, 52], [15, 59]]
+angle_range = [[151, 162], [271, 362]]
+risk_range = [[95, 170], [54, 130]]
 
 start_time = time.time()
 
@@ -17,7 +17,7 @@ def AI_loop():
   ai.turnLeft(0)
   ai.turnRight(0)
   ai.setTurnSpeed(35)
-  ai.setPower(40)
+  #ai.setPower(40)
   
   cur_time = time.time()
   duration = cur_time - start_time
@@ -104,7 +104,7 @@ def AI_loop():
       turn = (bullet_angle + 90) % 360
       ai.turnToDeg(turn)
       if ai.selfSpeed() <= 10:
-        ai.setPower(30)
+        #ai.setPower(30)
         ai.thrust(1)
         #ai.emergencyThrust()
       

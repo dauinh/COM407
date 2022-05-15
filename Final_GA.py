@@ -5,7 +5,7 @@ from random import choices
 import time
 import csv
 
-GEN = 100       # number of generations
+GEN = 10       # number of generations
 POPULATION = 20       # size of population
 CHROMOSOME = 100     # size of chromosome
 CROSSOVER_PROB = 1
@@ -42,6 +42,9 @@ def binary2decimal(chrom):
     r = int(''.join([str(j) for j in r]), 2)
 
     res.append(r)
+  
+  for i in range(1, len(res), 2):
+    res[i] = res[i] + res[i-1]
 
   return res
 

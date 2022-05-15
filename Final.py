@@ -1,4 +1,5 @@
 #Sylvia Le, Linh Nguyen, Uyen Tran
+
 import libpyAI as ai
 from Fuzzy import FuzzySystem
 
@@ -14,26 +15,28 @@ def AI_loop():
   ai.turnLeft(0)
   ai.turnRight(0)
   ai.setTurnSpeed(35)
-  ai.setPower(40)
+  #ai.setPower(40)
   
   # find walls
   heading = int(ai.selfHeadingDeg())
   tracking = int(ai.selfTrackingDeg())
 
-  frontWall = ai.wallFeeler(500,heading)
-  left45Wall = ai.wallFeeler(500,heading+45)
-  right45Wall = ai.wallFeeler(500,heading-45)
-  left90Wall = ai.wallFeeler(500,heading+90)
-  right90Wall = ai.wallFeeler(500,heading-90)
-  left135Wall = ai.wallFeeler(500,heading+135)
-  right135Wall = ai.wallFeeler(500,heading-135)
-  leftBackWall = ai.wallFeeler(500, heading+210)  #add for faster turn at parallel angle
-  rightBackWall = ai.wallFeeler(500, heading-210)
-  backWall = ai.wallFeeler(500,heading-180) 
-  trackWall = ai.wallFeeler(500,tracking)
+  frontWall = ai.wallFeeler(wall_range[1][1],heading)
+  left45Wall = ai.wallFeeler(wall_range[1][1],heading+45)
+  right45Wall = ai.wallFeeler(wall_range[1][1],heading-45)
+  left90Wall = ai.wallFeeler(wall_range[1][1],heading+90)
+  right90Wall = ai.wallFeeler(wall_range[1][1],heading-90)
+  left135Wall = ai.wallFeeler(wall_range[1][1],heading+135)
+  right135Wall = ai.wallFeeler(wall_range[1][1],heading-135)
+  leftBackWall = ai.wallFeeler(wall_range[1][1], heading+210)  #add for faster turn at parallel angle
+  rightBackWall = ai.wallFeeler(wall_range[1][1], heading-210)
+  backWall = ai.wallFeeler(wall_range[1][1],heading-180) 
+  trackWall = ai.wallFeeler(wall_range[1][1],tracking)
   
   walls = [frontWall, left45Wall, right45Wall, left90Wall, right90Wall,
     left135Wall, right135Wall, leftBackWall, rightBackWall, backWall, trackWall]
+  front_walls = [frontWall, left45Wall, right45Wall]
+  back_walls = [left135Wall, right135Wall, leftBackWall, rightBackWall, backWall]
 
   # inputs
   closest_wall = min(walls)
@@ -54,7 +57,7 @@ def AI_loop():
   #print('wall risk: ', wall_risk)
   #print('bullet risk: ', bullet_risk)
   #print('enemy risk: ', enemy_risk)
-  print()
+  #print()
   
   risks = {'wall': wall_risk, 'bullet': bullet_risk, 'enemy': enemy_risk}
   highest = max(risks.values())
@@ -91,7 +94,7 @@ def AI_loop():
       turn = (bullet_angle + 90) % 360
       ai.turnToDeg(turn)
       if ai.selfSpeed() <= 10:
-        ai.setPower(30)
+        #ai.setPower(30)
         ai.thrust(1)
         #ai.emergencyThrust()
       
@@ -103,5 +106,6 @@ def AI_loop():
       ai.turnToDeg(int(enemy_angle))
     ai.fireShot()
   print('----------------')
+  print()
 
 ai.start(AI_loop,["-name","Final","-join","localhost"])

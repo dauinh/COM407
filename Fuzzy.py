@@ -1,7 +1,5 @@
-# Testing method: fuzzy system in main() => FuzzySystem() in main() => FuzzySystem() in xpilot
-# Note: 
-#   - change rule evaluaion for bullet dodging and enemy shooting
-#   - create parameter for FuzzySystem
+#Sylvia Le, Linh Nguyen, Uyen Tran
+
 """Membership
 """
 class Membership():
@@ -47,6 +45,7 @@ class FuzzySystem():
     # distance to walls
     self.near = Membership(wall[0][0], wall[0][1], True)
     self.far = Membership(wall[1][0], wall[1][1])
+    self.wall_ranges = wall
 
     # speed
     self.slow = Membership(speed[0][0], speed[0][1], True)
@@ -59,6 +58,11 @@ class FuzzySystem():
     # risk
     self.low = Membership(risk[0][0], risk[0][1], True)
     self.high = Membership(risk[1][0], risk[1][1])
+
+  def is_all_near(self, walls: list):
+    check = False
+    # for w in walls:
+      # if self.wall_ranges[0][0]
 
   def wall_risk(self, wall, speed):
     """

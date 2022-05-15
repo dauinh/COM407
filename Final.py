@@ -12,7 +12,7 @@ risk_range = [[0, 30], [25, 100]]
 # to use in production system
 near = wall_range[0][1]
 far = wall_range[1][0]
-farthest = wall_range[1][1]
+farthest = wall_range[1][1]     # farthest range agent can detect
 
 def AI_loop():
   # Release keys
@@ -38,10 +38,14 @@ def AI_loop():
   backWall = ai.wallFeeler(farthest,heading-180) 
   trackWall = ai.wallFeeler(farthest,tracking)
   
-  walls = [frontWall, left45Wall, right45Wall, left90Wall, right90Wall,
-    left135Wall, right135Wall, leftBackWall, rightBackWall, backWall, trackWall]
+  # walls = [frontWall, left45Wall, right45Wall, left90Wall, right90Wall,
+    # left135Wall, right135Wall, leftBackWall, rightBackWall, backWall, trackWall]
   front_walls = [frontWall, left45Wall, right45Wall]
   back_walls = [left135Wall, right135Wall, leftBackWall, rightBackWall, backWall]
+  walls = front_walls + back_walls
+  walls.append(left90Wall)
+  walls.append(right90Wall)
+  walls.append(trackWall)
 
   # inputs
   closest_wall = min(walls)

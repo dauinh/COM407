@@ -43,8 +43,9 @@ def binary2decimal(chrom):
 
     res.append(1+r)
 
+  # each range: [start, start+length]
   for i in range(1, len(res), 2):
-	  res[i] = res[i] + res[i-1]
+    res[i] = res[i] + res[i-1]
   
   return res
 
@@ -52,7 +53,7 @@ def binary2decimal(chrom):
 def fitness():
   f = open('agentScore.txt', 'r').read()
   if f == "":
-    return -1000
+    return float("inf")
   return float(f)
 
 
@@ -104,13 +105,20 @@ def breed(parents):
 
 # standard wheel selection
 def select(population, fitness_list):
+  # handle negative fitness values
+  least = min(fitness_list)
+  for n in fitness_list:
+    if n < 0: n += least
+
+  # calculate fitness ratio for each child
   total = sum(fitness_list)
   fitness_ratio = []
-  for i in range(len(population)):
+  for i in range(POPULATION):
     ratio = fitness_list[i] / total
     ratio = round(ratio, 3)
     fitness_ratio.append(ratio)
   
+  # selection
   parents = []
   dad = choices(population, fitness_ratio)
   mom = choices(population, fitness_ratio)
@@ -121,6 +129,7 @@ def select(population, fitness_list):
   return parents
 
 def GA():
+  # save results to txt file
   results = open('results.csv', 'w')
   csv_writer = csv.writer(results)
   headers = ['Generation','Id','Chromosome','Fitness']
@@ -134,8 +143,6 @@ def GA():
   #sub.run("python3 Test.py", shell=True)
 
   for i in range(GEN):
-
-    # DO THIS
     fitness_list = []
     new_pop = []
     for j in range(len(pop)):
@@ -144,21 +151,24 @@ def GA():
       print()
 
       # Sylvia
-      # insert value into Final.py
+      # insert value into agent.py
       template = open('agent_template.txt', 'r').read()
       vals = binary2decimal(pop[j])
       agent = template.format(*tuple(vals))
       testfile = open('agent.py', 'w')
       testfile.write(agent)
 
-      # test this
+      # run the child
       try:
         p2 = sub.run("python3 agent.py & python3 Test.py", shell=True)
       except Exception as e:
         sub.run("pkill xpilots", shell=True)
         print("Error:", e)
 
+      # find its fitness
       x = fitness()
+      if x == float("inf"):   # remove buggy child
+        continue
       fitness_list.append(x)
       chromo = ''
       for k in range(len(pop[j])):
@@ -169,29 +179,31 @@ def GA():
     # data.append(sum(fitness_list)/len(pop))
     # generations.append(i)
 
+    # elite
     #best = fitness_list.index(max(fitness_list))
     #elite = pop[best]
     #new_pop.append(elite)
 
-
     # Generate new population
-    while(len(new_pop) < POPULATION):
+    count = POPULATION
+    while count > -1:
       # Select 2 chromosomes
       parents = select(pop, fitness_list)
       # Generate new child
       children = breed(parents)
       new_pop.append(children[0])
       new_pop.append(children[1])
+      count -= 1
 
     pop = new_pop
 
-  outfile = open('final_pop.txt', 'w', encoding='utf8')
-  fin = ''
-  for i in range(len(pop)):
-    chromo = ''
-    for j in range(CHROMOSOME):
-      chromo += str(pop[i][j])
-    fin += chromo + '\n\n'
-  outfile.write(fin)
+  # outfile = open('final_pop.txt', 'w', encoding='utf8')
+  # fin = ''
+  # for i in range(len(pop)):
+  #   chromo = ''
+  #   for j in range(CHROMOSOME):
+  #     chromo += str(pop[i][j])
+  #   fin += chromo + '\n\n'
+  # outfile.write(fin)
 
 GA()

@@ -106,14 +106,14 @@ def breed(parents):
 # standard wheel selection
 def select(population, fitness_list):
   # handle negative fitness values
-  least = min(fitness_list)
+  least = abs(min(fitness_list))
   for n in fitness_list:
     if n < 0: n += least
 
   # calculate fitness ratio for each child
   total = sum(fitness_list)
   fitness_ratio = []
-  for i in range(POPULATION):
+  for i in range(len(fitness_list)):
     ratio = fitness_list[i] / total
     ratio = round(ratio, 3)
     fitness_ratio.append(ratio)
@@ -145,7 +145,7 @@ def GA():
   for i in range(GEN):
     fitness_list = []
     new_pop = []
-    for j in range(len(pop)):
+    for j in range(POPULATION):
       print('gen:', i)
       print('chromosome:', j)
       print()
@@ -185,15 +185,13 @@ def GA():
     #new_pop.append(elite)
 
     # Generate new population
-    count = POPULATION
-    while count > -1:
+    while(len(new_pop) < POPULATION):
       # Select 2 chromosomes
       parents = select(pop, fitness_list)
       # Generate new child
       children = breed(parents)
       new_pop.append(children[0])
       new_pop.append(children[1])
-      count -= 1
 
     pop = new_pop
 

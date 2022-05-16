@@ -106,9 +106,16 @@ def breed(parents):
 # standard wheel selection
 def select(population, fitness_list):
   # handle negative fitness values
+
   least = abs(min(fitness_list))
-  for n in fitness_list:
-    if n < 0: n += least
+  for i in range(len(fitness_list)):
+    fitness_list[i] += least
+  
+  copy_pop = []
+  for i in range(len(fitness_list)):
+    if fitness_list[i] != float('inf'):
+      copy_pop.append(population[i])
+
 
   # calculate fitness ratio for each child
   total = sum(fitness_list)
@@ -120,8 +127,8 @@ def select(population, fitness_list):
   
   # selection
   parents = []
-  dad = choices(population, fitness_ratio)
-  mom = choices(population, fitness_ratio)
+  dad = choices(copy_pop, fitness_ratio)
+  mom = choices(copy_pop, fitness_ratio)
 
   parents.append(dad[0])
   parents.append(mom[0])
@@ -139,7 +146,7 @@ def GA():
   pop = initial_gen()
   # data = []
   # generations = []
-  p1 = sub.Popen("./xpilots -map maps/simple.xp -noQuit -switchBase 1 +teamPlay -reset -worldLives 1 -limitedLives", shell=True)
+  p1 = sub.Popen("./xpilots -map maps/simple.xp -noQuit -switchBase 1 +teamPlay -reset -worldLives 1 -limitedLives -fps 24", shell=True)
   #sub.run("python3 Test.py", shell=True)
 
   for i in range(GEN):
